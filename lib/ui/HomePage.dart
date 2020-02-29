@@ -1,14 +1,42 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
+import 'package:product_ui/ui/AnimalDetailPage.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+class CategoryData {
+  String imageName;
+  String categoryName;
+
+  CategoryData({this.categoryName, this.imageName});
+}
+
+class AnimalData {
+  String imageName;
+  String animalName;
+  String gender;
+  String categoryName;
+  String age;
+  String distance;
+  int backgroundColor;
+
+  AnimalData(
+      {this.animalName,
+      this.imageName,
+      this.categoryName,
+      this.gender,
+      this.distance,
+      this.age,
+      this.backgroundColor});
+}
+
 class _HomePageState extends State<HomePage> {
   final GlobalKey<InnerDrawerState> _innerDrawerKey =
-  GlobalKey<InnerDrawerState>();
+      GlobalKey<InnerDrawerState>();
   bool _swipe = true;
   InnerDrawerAnimation _animationType = InnerDrawerAnimation.static;
   bool _proportionalChildArea = true;
@@ -16,6 +44,43 @@ class _HomePageState extends State<HomePage> {
   bool _topBottom = false;
   double _scale = 0.9;
   double _borderRadius = 50;
+  List<CategoryData> categoryList = [
+    CategoryData(categoryName: "Cats", imageName: "cat.png"),
+    CategoryData(categoryName: "Dogs", imageName: "dog.png"),
+    CategoryData(categoryName: "Parrots", imageName: "parrot.png"),
+    CategoryData(categoryName: "Turtles", imageName: "turtle.png"),
+    CategoryData(categoryName: "Elephants", imageName: "elephant.png"),
+    CategoryData(categoryName: "Fishs", imageName: "fish.png"),
+  ];
+
+  List<AnimalData> animalList = [
+    AnimalData(
+        imageName: "cat_PNG50529.png",
+        categoryName: "Abyssinian cat",
+        gender: "gender.png",
+        backgroundColor: 0xffdde3b3,
+        age: "2",
+        animalName: "Sola",
+        distance: "7.8"),
+    AnimalData(
+        imageName: "cat2.png",
+        categoryName: "Abyssinian cat",
+        gender: "girl.png",
+        backgroundColor: 0xffead0aa,
+        age: "1.2",
+        animalName: "Orion",
+        distance: "2"),
+    AnimalData(
+        imageName: "cat3.png",
+        categoryName: "Abyssinian cat",
+        gender: "gender.png",
+        backgroundColor: 0xffdadee8,
+        age: "1.4",
+        animalName: "Lisa",
+        distance: "5.2"),
+  ];
+
+  int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +115,10 @@ class _HomePageState extends State<HomePage> {
                   ListTile(
                     leading: CircleAvatar(
                       backgroundImage:
-                      AssetImage("assets/adult-1867889_640.jpg"),
+                          AssetImage("assets/adult-1867889_640.jpg"),
                     ),
                     title: Text(
-                      "Adoption",
+                      "Mona Lisa",
                       style: menuText,
                     ),
                     subtitle: Text(
@@ -171,7 +236,8 @@ class _HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Text(
                             "Location",
-                            style: TextStyle(fontSize: 14),
+                            style:
+                                TextStyle(fontSize: 14, color: Colors.black54),
                           ),
                           Row(
                             children: <Widget>[
@@ -204,7 +270,7 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(right: 10),
                         child: CircleAvatar(
                           backgroundImage:
-                          AssetImage("assets/adult-1867889_640.jpg"),
+                              AssetImage("assets/adult-1867889_640.jpg"),
                         ),
                       )
                     ],
@@ -221,48 +287,95 @@ class _HomePageState extends State<HomePage> {
                           topRight: Radius.circular(20),
                         ),
                       ),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 30),
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15)),
-                                    color: Colors.white),
-                                child: Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                                  child: TextFormField(
-                                    cursorColor: Theme.of(context).accentColor,
-                                    decoration: InputDecoration(
-                                      prefixIcon: Icon(Icons.search),
-                                      hintText: "Search",
-                                      border: InputBorder.none,
-                                      suffixIcon: Icon(Icons.sort),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 30),
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(15)),
+                                      color: Colors.white),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: TextFormField(
+                                      cursorColor:
+                                          Theme.of(context).accentColor,
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.search),
+                                        hintText: "Search",
+                                        border: InputBorder.none,
+                                        suffixIcon: Icon(Icons.sort),
+                                      ),
                                     ),
-                                  ),
-                                )),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            height: 120,
-                            child: ListView(
-                              itemExtent: 80,
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              children: <Widget>[
-                                categoryBox(),
-                                categoryBox(),
-                              ],
+                                  )),
                             ),
-                          )
-                        ],
+                            Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 120,
+                                child: ListView.builder(
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          currentIndex = index;
+                                        });
+                                      },
+                                      child: categoryBox(
+                                          name:
+                                              categoryList[index].categoryName,
+                                          imageName:
+                                              categoryList[index].imageName,
+                                          isSelected: index == currentIndex),
+                                    );
+                                  },
+                                  itemExtent: 90,
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: categoryList.length,
+                                )),
+                            ListView.builder(
+                              itemBuilder: (BuildContext context, int index) {
+                                return GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(builder: (context) {
+                                        return AnimalDetailPage(
+                                          categoryName:
+                                              animalList[index].categoryName,
+                                          age: animalList[index].age,
+                                          animalName:
+                                              animalList[index].animalName,
+                                          gender: animalList[index].gender,
+                                      index: index,
+                                           backgroundColor: animalList[index].backgroundColor,
+                                        );
+                                      }));
+                                    },
+                                    child: animalBox(context,
+                                        distance: animalList[index].distance,
+                                        animalName:
+                                            animalList[index].animalName,
+                                        age: animalList[index].age,
+                                        gender: animalList[index].gender,
+                                        categoryName:
+                                            animalList[index].categoryName,
+                                        imageName: animalList[index].imageName,
+                                        backgroundColor:
+                                            animalList[index].backgroundColor));
+                              },
+                              physics: NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: animalList.length,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -273,7 +386,139 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  Column categoryBox() {
+  Widget animalBox(BuildContext context,
+      {imageName,
+      animalName,
+      categoryName,
+      age,
+      gender,
+      distance,
+      int backgroundColor}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      child: Container(
+        height: 270,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.transparent,
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.07),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                              offset: Offset(0, 10))
+                        ],
+                        color: Color(backgroundColor),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    height: 220,
+                    width: MediaQuery.of(context).size.width / 2 - 10,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.07),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                              offset: Offset(0, 10))
+                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20))),
+                    height: 180,
+                    width: MediaQuery.of(context).size.width / 2 - 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                "$animalName",
+                                style: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold),
+                              ),
+                              Image.asset(
+                                "assets/${gender}",
+                                width: 30,
+                                height: 30,
+                                color: Colors.black54,
+                              )
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            "$categoryName",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "$age Year old",
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black45),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.location_on,
+                                color: Color(0xff497473),
+                              ),
+                              Expanded(
+                                child: AutoSizeText(
+                                  "Distance: $distance km",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black45,
+                                      fontWeight: FontWeight.w500),
+                                  maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Hero(
+                tag: imageName,
+                child: Image.asset(
+                  "assets/$imageName",
+                  height: 220,
+                  width: MediaQuery.of(context).size.width / 2 - 10,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget categoryBox({name, imageName, bool isSelected}) {
     return Column(
       children: <Widget>[
         SizedBox(
@@ -285,25 +530,27 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Color(0xff497473).withOpacity(0.3),
+                    color: isSelected
+                        ? Color(0xff497473).withOpacity(0.3)
+                        : Colors.black.withOpacity(0.05),
                     offset: Offset(0, 5),
                     blurRadius: 10,
                     spreadRadius: 5)
               ],
-              color: Color(0xff497473),
+              color: isSelected ? Color(0xff497473) : Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Padding(
             padding: EdgeInsets.all(10),
             child: Image.asset(
-              "assets/cat.png",
-              color: Colors.white,
+              "assets/$imageName",
+              color: isSelected ? Colors.white : Color(0xff497473),
             ),
           ),
         ),
         SizedBox(
           height: 5,
         ),
-        Text("Cats")
+        Text("$name")
       ],
     );
   }
