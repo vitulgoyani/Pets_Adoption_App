@@ -1,6 +1,6 @@
 🐈 Pets Adoption App 🐶
 
-![Image description](assets/cat1.png)
+![Image description](/cat1.png)
 
 A new Flutter application. with morden design concept
 
